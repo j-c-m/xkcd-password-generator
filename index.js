@@ -1,91 +1,89 @@
-YUI().use('node', 'event', function(Y) {
-    Y.on('domready', function() {
-        var numwords = 3;
-        var digits = true;
-        var caps = false;
-        var spaces = true;
+$(function() {
+    var numwords = 3;
+    var digits = true;
+    var caps = false;
+    var spaces = true;
 
-        function onoff(b)
-        {
-            return b ? 'on' : 'off';
-        }
-        
-        function update_password() {
-            Y.one('#numwords').setContent(numwords);
-            Y.one('#digits').setContent('digits: ' + onoff(digits));
-            Y.one('#caps').setContent('caps: ' + onoff(caps));
-            Y.one('#spaces').setContent('spaces: ' + onoff(spaces));
+    function onoff(b) {
+        return b ? 'on' : 'off';
+    }
 
-            
-            var password_div = Y.one('#password');
-            
-            if (window.getSelection && window.getSelection().removeAllRanges) {
-                window.getSelection().removeAllRanges();
-            }
+    function update_password() {
+        $('#numwords').text(numwords);
+        $('#digits').text('digits: ' + onoff(digits));
+        $('#caps').text('caps: ' + onoff(caps));
+        $('#spaces').text('spaces: ' + onoff(spaces));
 
-            if (spaces) {
-                password_div.setContent(pw_gen(numwords, digits, caps).join(' '));
-            } else {
-                password_div.setContent(pw_gen(numwords, digits, caps).join(''));
-            }
 
+        var password_div = $('#password');
+
+        if (window.getSelection && window.getSelection().removeAllRanges) {
+            window.getSelection().removeAllRanges();
         }
 
-        function selectText(node) {
-            if (document.selection) {
-                var div = document.body.createTextRange();
-
-                div.moveToElementText(node);
-                div.select();
-            } else {
-                var div = document.createRange();
-                div.setStartBefore(node);
-                div.setEndAfter(node);
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(div);
-            }
+        if (spaces) {
+            password_div.text(pw_gen(numwords, digits, caps).join(' '));
+        } else {
+            password_div.text(pw_gen(numwords, digits, caps).join(''));
         }
 
-        function copyToClipboard(text) {
-            window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    }
+
+    function selectText(node) {
+        if (document.selection) {
+            var div = document.body.createTextRange();
+
+            div.moveToElementText(node);
+            div.select();
+        } else {
+            var div = document.createRange();
+            div.setStartBefore(node);
+            div.setEndAfter(node);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(div);
         }
+    }
 
-        Y.one('#generate_button').on('click', function(e) {
-            update_password();
-        });
+    function copyToClipboard(text) {
+        window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    }
 
-        Y.one('#more_words').on('click', function(e) {
-            if (numwords < 10) numwords++;
-            update_password();
-        });
-        Y.one('#less_words').on('click', function(e) {
-            if (numwords > 3 || (numwords > 2 && digits)) numwords--;
-            update_password();
-        });
-        Y.one('#digits').on('click', function(e) {
-            digits = !digits;
-            if (numwords < 3 && !digits) {
-                numwords = 3;
-            }
-            update_password();
-        });
-        Y.one('#caps').on('click', function(e) {
-            caps = !caps;
-            update_password();
-        });
-        Y.one('#spaces').on('click', function(e) {
-            spaces = !spaces;
-            update_password();
-        });
-        Y.one('#select').on('click', function(e) {
-            selectText(Y.one('#password').getDOMNode());
-        });
-
-
-
-
-
+    $('#generate_button').click(function(e) {
         update_password();
     });
+
+    $('#more_words').click(function(e) {
+        if (numwords < 10) numwords++;
+        update_password();
+    });
+
+    $('#less_words').click(function(e) {
+        if (numwords > 3 || (numwords > 2 && digits)) numwords--;
+        update_password();
+    });
+
+    $('#digits').click(function(e) {
+        digits = !digits;
+        if (numwords < 3 && !digits) {
+            numwords = 3;
+        }
+        update_password();
+    });
+
+    $('#caps').click(function(e) {
+        caps = !caps;
+        update_password();
+    });
+
+    $('#spaces').click(function(e) {
+        spaces = !spaces;
+        update_password();
+    });
+
+    $('#select').click(function(e) {
+        selectText($('#password').get(0));
+    });
+
+    update_password();
 
 });
