@@ -21,13 +21,13 @@ function pw_gen(numwords, digits, caps) {
     }
 
     for (var i = 0; i < numwords; i++) {
-        var index = Math.floor(Math.random() * 0x100000000);
-
+        var index = 0;
+        
         if (hash[i] > 0) {
-            index = (index ^ hash[i]) + 0x100000000
+            index = hash[i];
+        } else {
+            index = Math.floor(Math.random() * 0x100000000);
         }
-
-
         words.push(wordlist[index % wordlist.length]);
     }
 
