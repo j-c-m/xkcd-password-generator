@@ -1,6 +1,6 @@
-var wordlist = ['<?php echo join("', '",$wordlist); ?>'];
+var wordlist_url = 'en-wordlist.txt';
 
-function pw_gen(numwords, digits, caps) {
+function pw_gen(callback, numwords, digits, caps) {
     if (typeof(numwords) === 'undefined') {
         numwords = 3;
     }
@@ -11,6 +11,13 @@ function pw_gen(numwords, digits, caps) {
         caps = false;
     }
 
+    if (typeof(wordlist) === 'undefined') {
+        $.get(wordlist_url, function(txt) {
+            wordlist = txt.split('\n');
+            pw_gen(callback, numwords,digits,caps);
+        });
+        return;
+    }
 
     var words = [];
 
@@ -41,5 +48,7 @@ function pw_gen(numwords, digits, caps) {
         words.splice(Math.floor(Math.random() * 0x100000000) % (numwords + 1), 0, Math.floor(Math.random() * 0x100000000 % 10000));
     }
 
-    return (words);
+    if (typeof(callback) == 'function') {
+        callback.call(this, words);
+    }
 }

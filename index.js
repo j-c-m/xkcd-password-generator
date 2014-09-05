@@ -21,12 +21,15 @@ $(function() {
             window.getSelection().removeAllRanges();
         }
 
+        var spacer = '';
+        
         if (spaces) {
-            password_div.text(pw_gen(numwords, digits, caps).join(' '));
-        } else {
-            password_div.text(pw_gen(numwords, digits, caps).join(''));
+            spacer = ' ';
         }
-
+        
+        pw_gen(function(words) {
+            password_div.text(words.join(spacer));
+        }, numwords, digits, caps);
     }
 
     function selectText(node) {
