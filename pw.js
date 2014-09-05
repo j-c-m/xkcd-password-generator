@@ -48,7 +48,7 @@ function pw_gen(callback, numwords, digits, caps) {
         words.splice(Math.floor(Math.random() * 0x100000000) % (numwords + 1), 0, Math.floor(Math.random() * 0x100000000 % 10000));
     }
 
-    if (typeof(callback) == 'function') {
+    if (typeof(callback) === 'function') {
         callback.call(this, words);
     }
 }
