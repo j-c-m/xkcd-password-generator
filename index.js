@@ -16,6 +16,8 @@ $(function() {
 
 
         var password_div = $('#password');
+        var entropy_span = $('#entropy');
+        var brute_entropy_span = $('#brute_entropy');
 
         if (window.getSelection && window.getSelection().removeAllRanges) {
             window.getSelection().removeAllRanges();
@@ -26,9 +28,15 @@ $(function() {
         if (spaces) {
             spacer = ' ';
         }
-        
-        pw_gen(function(words) {
+            
+        pw_gen(function(words, entropy) {
             password_div.text(words.join(spacer));
+            entropy_span.text(entropy);
+            
+            var brute_possible = 26 + 26 * caps + 10 * digits + spaces;
+            var brute_entropy = (words.join(spacer)).length * (Math.log(brute_possible) / Math.log(2))
+            brute_entropy_span.text(Math.floor(brute_entropy));
+            
         }, numwords, digits, caps);
     }
 

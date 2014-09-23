@@ -38,17 +38,19 @@ function pw_gen(callback, numwords, digits, caps) {
         words.push(wordlist[index % wordlist.length]);
     }
 
+    var entropy = (Math.log(wordlist.length) / Math.log(2)) * numwords;
+    
     if (caps) {
         var index = Math.floor(Math.random() * 0x100000000) % words.length;
-        console.log(words[index]);
         words[index] = words[index].charAt(0).toUpperCase() + words[index].slice(1);
     }
 
     if (digits) {
         words.splice(Math.floor(Math.random() * 0x100000000) % (numwords + 1), 0, Math.floor(Math.random() * 0x100000000 % 10000));
+        entropy += Math.log(10000) / Math.log(2);
     }
-
+     
     if (typeof(callback) === 'function') {
-        callback.call(this, words);
+        callback.call(this, words, Math.floor(entropy));
     }
 }
