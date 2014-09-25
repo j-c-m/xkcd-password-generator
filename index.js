@@ -69,15 +69,12 @@ $(function() {
     });
 
     $('#less_words').click(function(e) {
-        if (numwords > 3 || (numwords > 2 && digits)) numwords--;
+        if (numwords > 1) numwords--;
         update_password();
     });
 
     $('#digits').click(function(e) {
         digits = !digits;
-        if (numwords < 3 && !digits) {
-            numwords = 3;
-        }
         update_password();
     });
 
