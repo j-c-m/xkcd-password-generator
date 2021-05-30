@@ -8,6 +8,9 @@ var byeJQ = (function () {
             if (selector.substring(0, 1) == "#") {
                 var el = document.getElementById(selector.substring(1));
                 return {
+                    [0]: el,
+                    length: 1,
+
                     text: function (text) {
                         if (el) el.innerText = text;
                     },
@@ -15,6 +18,9 @@ var byeJQ = (function () {
                         if (el && typeof callback === "function") {
                             el.addEventListener("click", callback);
                         }
+                    },
+                    get: function (num) {
+                        return this[num]
                     }
                 }
             }
