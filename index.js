@@ -1,3 +1,51 @@
+var byeJQ = (function () {
+    $ = function (selector) {
+        if (typeof selector === "function") {
+            if (document.readyState != "loading") selector();
+            else document.addEventListener("DOMContentLoaded", selector);
+        }
+        if (typeof selector === "string") {
+            if (selector.substring(0, 1) == "#") {
+                var el = document.getElementById(selector.substring(1));
+                return {
+                    text: function (text) {
+                        if (el) el.innerText = text;
+                    },
+                    click: function (callback) {
+                        if (el && typeof callback === "function") {
+                            el.addEventListener("click", callback);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $.get = function (url, callback) {
+        var xhr = getxhr(callback);
+        xhr.open('GET', url);
+        xhr.send();
+    }
+
+    function getxhr(callback) {
+        var xhr;
+
+        xhr = new XMLHttpRequest();
+
+        if (typeof callback === "function") {
+            xhr.onload = function () {
+                if (this.status == 200) callback(xhr.responseText);
+            }
+        }
+
+        return xhr;
+    }
+
+    return $;
+})();
+
+window.$ = byeJQ;
+
 $(function() {
     var numwords = 3;
     var digits = true;
@@ -24,19 +72,18 @@ $(function() {
         }
 
         var spacer = '';
-        
+
         if (spaces) {
             spacer = ' ';
         }
-            
+
         pw_gen(function(words, entropy) {
             password_div.text(words.join(spacer));
             entropy_span.text(entropy);
-            
+
             var brute_possible = 26 + 26 * caps + 10 * digits + spaces;
             var brute_entropy = (words.join(spacer)).length * (Math.log(brute_possible) / Math.log(2))
             brute_entropy_span.text(Math.floor(brute_entropy));
-            
         }, numwords, digits, caps);
     }
 

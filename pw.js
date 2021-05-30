@@ -29,7 +29,7 @@ function pw_gen(callback, numwords, digits, caps) {
 
     for (var i = 0; i < numwords; i++) {
         var index = 0;
-        
+
         if (hash[i] > 0) {
             index = hash[i];
         } else {
@@ -39,7 +39,7 @@ function pw_gen(callback, numwords, digits, caps) {
     }
 
     var entropy = (Math.log(wordlist.length) / Math.log(2)) * numwords;
-    
+
     if (caps) {
         var index = Math.floor(Math.random() * 0x100000000) % words.length;
         words[index] = words[index].charAt(0).toUpperCase() + words[index].slice(1);
@@ -49,7 +49,7 @@ function pw_gen(callback, numwords, digits, caps) {
         words.splice(Math.floor(Math.random() * 0x100000000) % (numwords + 1), 0, Math.floor(Math.random() * 0x100000000 % 10000));
         entropy += Math.log(10000) / Math.log(2);
     }
-     
+
     if (typeof(callback) === 'function') {
         callback.call(this, words, Math.floor(entropy));
     }
